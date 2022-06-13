@@ -9,7 +9,6 @@
                 </div>
                 <div class="divide-y divide-gray-300/50">
                     <div class="space-y-6 py-8 leading-7">
-
                                 <slot/>
                     </div>
                 </div>
