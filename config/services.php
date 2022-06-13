@@ -33,7 +33,7 @@ return [
     'google' => [
         'client_id' => env('GOOGLE_CLIENT_ID'),
         'client_secret' => env('GOOGLE_CLIENT_SECRET'),
-        'redirect' => 'http://localhost:8081/auth/google/callback',
+        'redirect' => 'https://cancellation.lcnidiomas.edu.co/auth/google/callback',
     ],
 
 ];
