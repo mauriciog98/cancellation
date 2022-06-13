@@ -153,7 +153,7 @@ watch(() => params,
                                                 {{ item.status }}
                                             </td>
                                             <td class="py-4 px-6 text-sm text-gray-500 whitespace-nowrap">
-                                                <Link :href="route('cancellation.cancel',item.id)" method="post" type="button" as="button" class="text-sm text-gray-700 underline">
+                                                <Link v-if="item.status !== 'attended'" :href="route('cancellation.cancel',item.id)" method="post" type="button" as="button" class="text-sm text-gray-700 underline">
                                                     Eliminar registro
                                                 </Link>
                                                 <br>
