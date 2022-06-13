@@ -40,10 +40,10 @@ class GoogleController extends Controller
                 return redirect()->route('dashboard');
 
             }else{
-                $newUser = User::updateOrCreate(['email' => $user->email],[
+                $newUser = User::update(['email' => $user->email],[
                     'name' => $user->name,
                     'google_id'=> $user->id,
-                    'password' => encrypt('123456dummy')
+                    'password' => encrypt('LCN2021*')
                 ]);
 
                 Auth::login($newUser);
