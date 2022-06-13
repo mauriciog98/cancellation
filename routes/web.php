@@ -40,3 +40,6 @@ Route::controller(GoogleController::class)->group(function(){
     Route::get('auth/google', 'redirectToGoogle')->name('auth.google');
     Route::get('auth/google/callback', 'handleGoogleCallback')->name('auth.google.callback');
 });
+
+Route::get('/students',[\App\Http\Controllers\StudentController::class,'index'])->name('students.index');
+Route::get('/lessons/{student}',[\App\Http\Controllers\LessonsController::class,'index'])->name('lessons.index');
