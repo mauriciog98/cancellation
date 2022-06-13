@@ -29,7 +29,7 @@ class LessonsController extends Controller
             ->orderBy('id','desc')
             ->first();
         $query = Lesson::query();
-        $query->where('id_enrollment', $enrollment->id);
+        $query->where('id_enrollment', $student->id);
 
 
         if ($request->has(['field', 'direction'])) {
