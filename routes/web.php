@@ -43,3 +43,5 @@ Route::controller(GoogleController::class)->group(function(){
 
 Route::get('/students',[\App\Http\Controllers\StudentController::class,'index'])->name('students.index');
 Route::get('/lessons/{student}',[\App\Http\Controllers\LessonsController::class,'index'])->name('lessons.index');
+Route::post('/cancel/{booking}',[\App\Http\Controllers\CancellationController::class,'cancel'])->name('cancellation.cancel');
+Route::post('/change/{booking}',[\App\Http\Controllers\CancellationController::class,'change'])->name('cancellation.change');

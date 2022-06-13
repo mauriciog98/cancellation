@@ -4,12 +4,14 @@ import Pagination from '@/Shared/Pagination.vue'
 import {pickBy, throttle} from 'lodash'
 import {reactive, watch} from "vue"
 import {Inertia} from '@inertiajs/inertia'
+import { Link } from '@inertiajs/inertia-vue3'
 
 
 const props = defineProps({
     items: Object,
     filters: Object,
-    student: String
+    student: Object,
+    notification: Object
 });
 
 const params = reactive({
@@ -25,7 +27,7 @@ function sort(field) {
 
 watch(() => params,
     throttle(function () {
-        Inertia.get(this.route('lessons.index',{'student': props.student}), pickBy(params), {replace: true, preserveState: true})
+        Inertia.get(this.route('lessons.index',{'student': props.student.id}), pickBy(params), {replace: true, preserveState: true})
     }, 150), {
         deep: true
     }
@@ -35,9 +37,12 @@ watch(() => params,
 <template>
     <AppLayout title="Clases">
         <template #header>
-            <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-                Clases
+            <h2 class="font-semibold text-xl text-gray-800 leading-tight capitalize">
+                Clases - {{ student.fullname }}
             </h2>
+            <h3 v-if="notification" class="text-green-300 capitalize">
+                {{ notification.message }}
+            </h3>
         </template>
 
         <div class="py-12">
@@ -48,7 +53,7 @@ watch(() => params,
                         <div class="overflow-x-auto -my-2 sm:-mx-6 lg:-mx-8">
                             <div class="inline-block py-2 min-w-full align-middle sm:px-6 lg:px-8">
                                 <div class="overflow-hidden border-b border-gray-200 shadow sm:rounded-lg">
-                                    <table class="table table-auto">
+                                    <table class="table table-auto mx-auto">
                                         <thead class="bg-orange-500">
                                         <tr>
                                             <th class="font-semibold tracking-wider text-left text-white" scope="col">
@@ -141,19 +146,25 @@ watch(() => params,
                                             <td class="py-4 px-6 text-sm text-gray-500 whitespace-nowrap">
                                                 {{ item.name_typeclass }}
                                             </td>
-                                            <td class="py-4 px-6 text-sm text-gray-500 whitespace-nowrap">
+                                            <td class="py-4 px-6 text-sm text-gray-500 whitespace-nowrap capitalize">
                                                 {{ item.name_teacher }}
                                             </td>
                                             <td class="py-4 px-6 text-sm text-gray-500 whitespace-nowrap">
                                                 {{ item.status }}
                                             </td>
                                             <td class="py-4 px-6 text-sm text-gray-500 whitespace-nowrap">
-                                                {{ item.status }}
+                                                <Link :href="route('cancellation.cancel',item.id)" method="post" type="button" as="button" class="text-sm text-gray-700 underline">
+                                                    Eliminar registro
+                                                </Link>
+                                                <br>
+                                                <Link :href="route('cancellation.change',item.id)" method="post" type="button" as="button" class="text-sm text-gray-700 underline">
+                                                    Cambiar asistencia
+                                                </Link>
                                             </td>
                                         </tr>
                                         </tbody>
                                     </table>
-                                    <pagination :links="items.links" class="mt-10"/>
+                                    <pagination :links="items.links" class="mt-10 mx-auto"/>
                                 </div>
                             </div>
                         </div>

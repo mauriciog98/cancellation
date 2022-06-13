@@ -53,8 +53,8 @@ watch(() => params,
                     <div class="flex flex-col">
                         <div class="overflow-x-auto -my-2 sm:-mx-6 lg:-mx-8">
                             <div class="inline-block py-2 min-w-full align-middle sm:px-6 lg:px-8">
-                                <div class="overflow-hidden border-b border-gray-200 shadow sm:rounded-lg">
-                                    <table class="table table-auto">
+                                <div class="overflow-hidden border-b border-gray-200 shadow sm:rounded-lg content-center place-content-center">
+                                    <table class="table table-auto mx-auto">
                                         <thead class="bg-orange-500">
                                         <tr>
                                             <th class="font-semibold tracking-wider text-left text-white" scope="col">
@@ -164,7 +164,7 @@ watch(() => params,
                                         </tr>
                                         </tbody>
                                     </table>
-                                    <pagination :links="items.links" class="mt-10"/>
+                                    <pagination :links="items.links" class="mt-10 mx-auto"/>
                                 </div>
                             </div>
                         </div>

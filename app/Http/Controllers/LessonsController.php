@@ -16,7 +16,7 @@ class LessonsController extends Controller
      *
      * @return \Inertia\Response
      */
-    public function index($student, Request $request)
+    public function index(Student $student, Request $request)
     {
         $request->validate([
             'direction' => ['in:asc,desc'],
@@ -24,7 +24,7 @@ class LessonsController extends Controller
         ]);
         $enrollment = DB::connection('old')
             ->table('enrollment')
-            ->where('id_user',$student)
+            ->where('id_user',$student->id)
             ->where('status','activo')
             ->orderBy('id','desc')
             ->first();
@@ -32,7 +32,11 @@ class LessonsController extends Controller
         $query->where('id_enrollment', $enrollment->id);
 
 
-        if (request()->has(['field', 'direction'])) {
+        if ($request->has(['field', 'direction'])) {
+            $query->orderBy(request('field'), request('direction'));
+        }else{
+            $request['field'] = 'start';
+            $request['direction'] = 'desc';
             $query->orderBy(request('field'), request('direction'));
         }
 
