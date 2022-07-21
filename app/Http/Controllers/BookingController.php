@@ -31,7 +31,7 @@ class BookingController extends Controller
             ->first();
         $query = Available::query();
 
-        if(!$request->has('id_branch')){
+        if(!$request->has(['id_branch'])){
             $request['id_branch'] = $enrollment->id_branch;
         }
 

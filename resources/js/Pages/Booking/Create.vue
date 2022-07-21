@@ -26,7 +26,7 @@ function sort(field) {
 
 watch(() => params,
     throttle(function () {
-      Inertia.get(this.route('booking.create', {'student': props.student.id}), pickBy(params), {
+      Inertia.get(this.route('booking.create', {'student': props.student.id}), pickBy(this.params), {
         replace: true,
         preserveState: true
       })
