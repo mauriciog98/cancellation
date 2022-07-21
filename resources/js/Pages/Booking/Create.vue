@@ -9,8 +9,7 @@ import {Link} from '@inertiajs/inertia-vue3'
 const props = defineProps({
   items: Object,
   filters: Object,
-  student: Object,
-  notification: Object
+  student: Object
 });
 
 const params = reactive({
@@ -20,13 +19,13 @@ const params = reactive({
 })
 
 function sort(field) {
-  this.params.field = field
-  this.params.direction = this.params.direction === 'asc' ? 'desc' : 'asc'
+  params.field = field
+  params.direction = params.direction === 'asc' ? 'desc' : 'asc'
 }
 
 watch(() => params,
     throttle(function () {
-      Inertia.get(this.route('booking.create', {'student': props.student.id}), pickBy(this.params), {
+      Inertia.get(this.route('booking.create', {'student': props.student.id}), pickBy(params), {
         replace: true,
         preserveState: true
       })
@@ -42,9 +41,6 @@ watch(() => params,
       <h2 class="font-semibold text-xl text-gray-800 leading-tight">
         Reservar a nombre de <span class="capitalize">{{ student.fullname }}</span>
       </h2>
-      <h3 v-if="notification" class="text-green-300 capitalize">
-        {{ notification.message }}
-      </h3>
     </template>
 
     <div class="py-12">

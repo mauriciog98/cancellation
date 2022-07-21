@@ -21,7 +21,8 @@ class BookingController extends Controller
     {
         $request->validate([
             'direction' => ['in:asc,desc'],
-            'field' => ['in:identification,fullname,status,email'],
+            'field' => ['in:start,name_program,name_type_class,name_classroom,max_student,reserved'],
+            'id_branch' => 'nullable|numeric'
         ]);
         $enrollment = DB::connection('old')
             ->table('enrollment')
@@ -31,15 +32,22 @@ class BookingController extends Controller
             ->first();
         $query = Available::query();
 
-        if(!$request->has(['id_branch'])){
+        if($request->has(['id_branch'])){
+            $query->where([
+                ['id_level', $enrollment->current_level],
+                ['start','>',Carbon::now()->format('Y-m-d H:i:s')],
+                ['id_branch',request('id_branch')]
+            ]);
+        }else{
             $request['id_branch'] = $enrollment->id_branch;
+            $query->where([
+                ['id_level', $enrollment->current_level],
+                ['start','>',Carbon::now()->format('Y-m-d H:i:s')],
+                ['id_branch',$enrollment->id_branch]
+            ]);
         }
 
-        $query->where([
-            ['id_level', $enrollment->current_level],
-            ['start','>',Carbon::now()->format('Y-m-d H:i:s')],
-            ['id_branch',request('id_branch')]
-        ]);
+
 
 
         if (!$request->has(['field', 'direction'])) {
@@ -47,6 +55,7 @@ class BookingController extends Controller
             $request['direction'] = 'asc';
         }
         $query->orderBy(request('field'), request('direction'));
+
 
         return Inertia::render('Booking/Create',[
             'items'=>$query->paginate()->withQueryString(),
