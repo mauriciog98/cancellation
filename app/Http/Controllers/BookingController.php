@@ -26,28 +26,26 @@ class BookingController extends Controller
         ]);
         $enrollment = DB::connection('old')
             ->table('enrollment')
-            ->where('id_user',$student->id)
-            ->where('status','activo')
-            ->orderBy('id','desc')
+            ->where('id_user', $student->id)
+            ->where('status', 'activo')
+            ->orderBy('id', 'desc')
             ->first();
         $query = Available::query();
 
-        if($request->has(['id_branch'])){
+        if ($request->has(['id_branch'])) {
             $query->where([
                 ['id_level', $enrollment->current_level],
-                ['start','>',Carbon::now()->format('Y-m-d H:i:s')],
-                ['id_branch',request('id_branch')]
+                ['start', '>', Carbon::now()->format('Y-m-d H:i:s')],
+                ['id_branch', request('id_branch')]
             ]);
-        }else{
+        } else {
             $request['id_branch'] = $enrollment->id_branch;
             $query->where([
                 ['id_level', $enrollment->current_level],
-                ['start','>',Carbon::now()->format('Y-m-d H:i:s')],
-                ['id_branch',$enrollment->id_branch]
+                ['start', '>', Carbon::now()->format('Y-m-d H:i:s')],
+                ['id_branch', $enrollment->id_branch]
             ]);
         }
-
-
 
 
         if (!$request->has(['field', 'direction'])) {
@@ -57,9 +55,9 @@ class BookingController extends Controller
         $query->orderBy(request('field'), request('direction'));
 
 
-        return Inertia::render('Booking/Create',[
-            'items'=>$query->paginate()->withQueryString(),
-            'filters'=>$request->all(['field', 'direction','id_branch']),
+        return Inertia::render('Booking/Create', [
+            'items' => $query->paginate()->withQueryString(),
+            'filters' => $request->all(['field', 'direction', 'id_branch']),
             'student' => $student
         ]);
     }
@@ -72,29 +70,24 @@ class BookingController extends Controller
     public function booking(Request $request)
     {
         $available = Available::findOrFail(request('id_available'));
-        if($available->typeclass_id == 3){
-            if($available->reserved < 8){
-                DB::connection('old')
-                    ->table('booking')
-                    ->insert([
-                        'id_available' => request('id_available'),
-                        'id_user_student' => request('id_student'),
-                        'active' => 'activo',
-                        'delete' => 'false',
-                    ]);
-                DB::connection('old')
-                    ->table('available')
-                    ->where('id',request('id_available'))
-                    ->increment('max_student');
-                DB::connection('old')
-                    ->table('available')
-                    ->where('id',request('id_available'))
-                    ->increment('reserved');
-                return redirect()->back()->with('notification', [
-                    'message'=>'Registros eliminados'
-                ]);
+        if ($available->typeclass_id == 3) {
+            if ($available->reserved < 8) {
+                return $this->create($request);
+            }
+        } else {
+            if ($available->reserved < 6) {
+                return $this->create($request);
             }
         }
+        return redirect()->back();
+
+    }
+
+    /**
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function create(Request $request): \Illuminate\Http\RedirectResponse
+    {
         DB::connection('old')
             ->table('booking')
             ->insert([
@@ -105,14 +98,14 @@ class BookingController extends Controller
             ]);
         DB::connection('old')
             ->table('available')
-            ->where('id',request('id_available'))
+            ->where('id', request('id_available'))
             ->increment('max_student');
         DB::connection('old')
             ->table('available')
-            ->where('id',request('id_available'))
+            ->where('id', request('id_available'))
             ->increment('reserved');
         return redirect()->back()->with('notification', [
-            'message'=>'Registros eliminados'
+            'message' => 'Registros eliminados'
         ]);
     }
 }
