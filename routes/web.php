@@ -46,4 +46,4 @@ Route::get('/lessons/{student}',[\App\Http\Controllers\LessonsController::class,
 Route::post('/cancel/{booking}',[\App\Http\Controllers\CancellationController::class,'cancel'])->name('cancellation.cancel');
 Route::post('/change/{booking}',[\App\Http\Controllers\CancellationController::class,'change'])->name('cancellation.change');
 Route::get('/booking/{student}',[\App\Http\Controllers\BookingController::class,'index'])->name('booking.create');
-Route::post('/booking/{student}',[\App\Http\Controllers\BookingController::class,'booking'])->name('booking.booking');
+Route::post('/booking',[\App\Http\Controllers\BookingController::class,'booking'])->name('booking.booking');

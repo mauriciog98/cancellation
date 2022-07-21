@@ -75,7 +75,7 @@ class BookingController extends Controller
             ->table('booking')
             ->insert([
                 'id_available' => request('id_available'),
-                'id_user_student' => request('is_student'),
+                'id_user_student' => request('id_student'),
                 'active' => 'activo',
                 'delete' => 'false',
             ]);

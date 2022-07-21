@@ -219,7 +219,7 @@ watch(() => params,
                         {{ item.reserved }}
                       </td>
                       <td class="py-4 px-6 text-sm text-gray-500 whitespace-nowrap">
-                        <Link v-if="item.status === 'activo'" :href="route('lessons.index',item.id)"
+                        <Link v-if="item.status === 'activo'" :href="route('booking.booking')" :data="{ id_available: item.id, id_student: student.id }" method="post"
                               class="text-sm text-gray-700 underline">
                           Reservar
                         </Link>
