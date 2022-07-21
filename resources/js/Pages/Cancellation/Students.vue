@@ -79,7 +79,7 @@ watch(() => params,
                                             <th class="font-semibold tracking-wider text-left text-white" scope="col">
                                             <span
                                                 class="inline-flex py-3 px-6 w-full justify-between"
-                                                @click="sort('identificaction')">
+                                                @click="sort('identification')">
                                                 Documento
                                                 <svg
                                                     v-if="params.field === 'identification' && params.direction === 'asc'"
@@ -160,6 +160,10 @@ watch(() => params,
                                                 <Link v-if="item.status === 'activo'" :href="route('lessons.index',item.id)" class="text-sm text-gray-700 underline">
                                                     Ver asistencia
                                                 </Link>
+                                              <br>
+                                              <Link v-if="item.status === 'activo'" :href="route('booking.create',item.id)" class="text-sm text-gray-700 underline">
+                                                Reservar
+                                              </Link>
                                             </td>
                                         </tr>
                                         </tbody>
