@@ -71,11 +71,11 @@ class BookingController extends Controller
     {
         $available = Available::findOrFail(request('id_available'));
         if ($available->typeclass_id == 3) {
-            if ($available->reserved < 8) {
+            if ($available->reserved < 8 && $available->max_student < 8) {
                 return $this->create($request);
             }
         } else {
-            if ($available->reserved < 6) {
+            if ($available->reserved < 6 && $available->max_student < 6) {
                 return $this->create($request);
             }
         }
