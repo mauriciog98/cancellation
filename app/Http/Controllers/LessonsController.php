@@ -30,7 +30,7 @@ class LessonsController extends Controller
             ->first();
         $query = Lesson::query();
 
-        $query->where('id_enrollment', $enrollment->id);
+        $query->where('id_user_student', $student->id);
 
 
         if ($request->has(['field', 'direction'])) {
