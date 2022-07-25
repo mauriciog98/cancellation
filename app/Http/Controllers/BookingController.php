@@ -71,41 +71,57 @@ class BookingController extends Controller
     {
         $available = Available::findOrFail(request('id_available'));
         if ($available->typeclass_id == 3) {
-            if ($available->reserved < 8 && $available->max_student < 8) {
-                return $this->create($request);
+            if ($available->reserved < 8) {
+                DB::connection('old')
+                    ->table('booking')
+                    ->insert([
+                        'id_available' => request('id_available'),
+                        'id_user_student' => request('id_student'),
+                        'active' => 'activo',
+                        'delete' => 'false',
+                    ]);
+                if ($available->max_student < 8) {
+                    DB::connection('old')
+                        ->table('available')
+                        ->where('id', request('id_available'))
+                        ->increment('max_student');
+                }
+                DB::connection('old')
+                    ->table('available')
+                    ->where('id', request('id_available'))
+                    ->increment('reserved');
+                return redirect()->back()->with('notification', [
+                    'message' => 'Registros eliminados'
+                ]);
             }
         } else {
-            if ($available->reserved < 6 && $available->max_student < 6) {
-                return $this->create($request);
+            if ($available->reserved < 6) {
+                DB::connection('old')
+                    ->table('booking')
+                    ->insert([
+                        'id_available' => request('id_available'),
+                        'id_user_student' => request('id_student'),
+                        'active' => 'activo',
+                        'delete' => 'false',
+                    ]);
+                if ($available->max_student < 6) {
+                    DB::connection('old')
+                        ->table('available')
+                        ->where('id', request('id_available'))
+                        ->increment('max_student');
+                }
+                DB::connection('old')
+                    ->table('available')
+                    ->where('id', request('id_available'))
+                    ->increment('reserved');
+                return redirect()->back()->with('notification', [
+                    'message' => 'Registros eliminados'
+                ]);
             }
         }
         return redirect()->back();
 
     }
 
-    /**
-     * @return \Illuminate\Http\RedirectResponse
-     */
-    public function create(Request $request): \Illuminate\Http\RedirectResponse
-    {
-        DB::connection('old')
-            ->table('booking')
-            ->insert([
-                'id_available' => request('id_available'),
-                'id_user_student' => request('id_student'),
-                'active' => 'activo',
-                'delete' => 'false',
-            ]);
-        DB::connection('old')
-            ->table('available')
-            ->where('id', request('id_available'))
-            ->increment('max_student');
-        DB::connection('old')
-            ->table('available')
-            ->where('id', request('id_available'))
-            ->increment('reserved');
-        return redirect()->back()->with('notification', [
-            'message' => 'Registros eliminados'
-        ]);
-    }
+
 }
