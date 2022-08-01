@@ -70,6 +70,12 @@ class BookingController extends Controller
     public function booking(Request $request)
     {
         $available = Available::findOrFail(request('id_available'));
+        $enrollment = DB::connection('old')
+            ->table('enrollment')
+            ->where('id_user',request('id_student'))
+            ->where('status','activo')
+            ->orderBy('id','desc')
+            ->first();
         if ($available->typeclass_id == 3) {
             if ($available->reserved < 8) {
                 DB::connection('old')
@@ -77,6 +83,7 @@ class BookingController extends Controller
                     ->insert([
                         'id_available' => request('id_available'),
                         'id_user_student' => request('id_student'),
+                        'id_enrollment' => $enrollment->id,
                         'active' => 'activo',
                         'delete' => 'false',
                     ]);
@@ -101,6 +108,7 @@ class BookingController extends Controller
                     ->insert([
                         'id_available' => request('id_available'),
                         'id_user_student' => request('id_student'),
+                        'id_enrollment' => $enrollment->id,
                         'active' => 'activo',
                         'delete' => 'false',
                     ]);
